@@ -8,9 +8,9 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
   // Dictionary to map route names to Lucide icons cleanly
   const icons = {
     DashboardScreen: 'house',
-    Stats: 'chart-pie',
-    Add: 'square-plus',
-    Profile: 'user',
+    StatsScreen: 'chart-pie',
+    AddScreen: 'square-plus',
+    ProfileScreen: 'user',
   };
 
   return (

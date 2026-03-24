@@ -19,6 +19,27 @@ export default function MainBottomTabNavigator() {
           tabBarLabel: 'Dashboard',
         }}
       />
+      <Tab.Screen
+        name="StatsScreen"
+        component={DashboardScreen}
+        options={{
+          tabBarLabel: 'Stats',
+        }}
+      />
+      <Tab.Screen
+        name="AddScreen"
+        component={DashboardScreen}
+        options={{
+          tabBarLabel: 'Stats',
+        }}
+      />
+      <Tab.Screen
+        name="ProfileScreen"
+        component={DashboardScreen}
+        options={{
+          tabBarLabel: 'Stats',
+        }}
+      />
     </Tab.Navigator>
   );
 }
