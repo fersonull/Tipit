@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RoundedCheckbox } from '../../components/ui/RoundedCheckBox';
 import { AuthContext } from '../../contexts/AuthContext';
 import { getAuthError } from '../../utils/firebaseAuth.utils';
+import { toast } from '../../utils/toast.utils';
 
 export default function LoginScreen({ navigation }) {
   // Local state to handle the UI toggle for the password visibility
@@ -33,7 +34,7 @@ export default function LoginScreen({ navigation }) {
     try {
       await register(formData.email, formData.password);
     } catch (error) {
-      Alert.alert('Sign up failed', getAuthError(error));
+      toast.error('Sign up failed', getAuthError(error));
     }
   };
 

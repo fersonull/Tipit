@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RoundedCheckbox } from '../../components/ui/RoundedCheckBox';
 import { AuthContext } from '../../contexts/AuthContext';
 import { getAuthError } from '../../utils/firebaseAuth.utils';
+import { toast } from '../../utils/toast.utils';
 
 export default function LoginScreen({ navigation }) {
   // Local state to handle the UI toggle for the password visibility
@@ -24,10 +25,10 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      await login(formData.email, formData.password);
+      const user = await login(formData.email, formData.password);
     } catch (error) {
       console.log(error);
-      Alert.alert('Login failed', getAuthError(error));
+      toast.error('Login failed', getAuthError(error));
     }
   };
 

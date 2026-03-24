@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
     } catch (error) {
-      throw error;
+      throw error.code;
     }
   };
 

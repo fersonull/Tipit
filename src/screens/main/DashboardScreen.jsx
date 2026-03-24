@@ -1,12 +1,17 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Text, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from '../../utils/toast.utils';
+import { getAuthError } from '../../utils/firebaseAuth.utils';
 
 export default function DashboardScreen() {
   const { logout, user } = useContext(AuthContext);
   console.log(user);
+
+  useEffect(() => {
+    toast.success('Login success', `Welcome ${user._user.displayName}!`);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -14,7 +19,7 @@ export default function DashboardScreen() {
 
       toast.success('Logout success', 'Logged out successfully');
     } catch (error) {
-      console.error('Error logging out:', error);
+      toast.error('Error logging out', getAuthError(error));
     }
   };
 
