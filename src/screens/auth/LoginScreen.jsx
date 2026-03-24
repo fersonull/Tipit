@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const user = await login(formData.email, formData.password);
+      await login(formData.email, formData.password);
     } catch (error) {
       console.log(error);
       toast.error('Login failed', getAuthError(error));
