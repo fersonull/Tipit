@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "311786382401",
+    "project_id": "tipit-9293a",
+    "storage_bucket": "tipit-9293a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311786382401:android:2194fa8e3226ce256512c0",
+        "android_client_info": {
+          "package_name": "com.tipit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311786382401-drqofi69vkj7espcjeungg3f2i99nv10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tipit",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "311786382401-d5n4dgplvhahqdpl5eg5oi8p7rl5vdt2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtgRrP6Q54BbITLgkdWhUJZpd-MnYCRiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311786382401-d5n4dgplvhahqdpl5eg5oi8p7rl5vdt2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
