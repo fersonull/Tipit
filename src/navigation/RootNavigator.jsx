@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthContext } from '../contexts/AuthContext';
 import MainTabNavigator from './MainTabNavigator';
+import TransactionDetailScreen from '../screens/main/TransactionDetailScreen';
 import AuthStack from './AuthStack';
 
 const Stack = createNativeStackNavigator();
@@ -27,13 +28,22 @@ const RootNavigator = () => {
         }}
       >
         {user ? (
-          <Stack.Screen
-            name="AppContent"
-            component={MainTabNavigator}
-            options={{
-              animation: 'ios_from_right',
-            }}
-          />
+          <Stack.Group>
+            <Stack.Screen
+              name="AppContent"
+              component={MainTabNavigator}
+              options={{
+                animation: 'ios_from_right',
+              }}
+            />
+            <Stack.Screen
+              name="TransactionDetail"
+              component={TransactionDetailScreen}
+              options={{
+                animation: 'ios_from_right',
+              }}
+            />
+          </Stack.Group>
         ) : (
           <Stack.Screen
             name="Authentication"

@@ -6,8 +6,10 @@ import {
   formatDate,
   getCategoryStyling,
 } from '../../utils/formatters.utils';
+import { useNavigation } from '@react-navigation/native';
 
 export default function TransactionList() {
+  const navigation = useNavigation();
   const { transactions, isLoading } = useTransactions();
 
   return (
@@ -41,6 +43,14 @@ export default function TransactionList() {
               <TouchableOpacity
                 key={tx.id}
                 activeOpacity={0.7}
+                onPress={() =>
+                  navigation.navigate('TransactionDetail', {
+                    transaction: {
+                      ...tx,
+                      date: new Date(tx.date).toISOString(),
+                    },
+                  })
+                }
                 className="flex-row justify-between items-center bg-white p-5 rounded-3xl shadow-sm border border-gray-50"
               >
                 <View className="flex-row items-center gap-4">
@@ -54,7 +64,7 @@ export default function TransactionList() {
                   {/* Text Info */}
                   <View>
                     <Text className="font-instrument-bold text-gray-900 text-base mb-1 capitalize">
-                      {tx.category} {tx.note ? `- ${tx.note}` : ''}
+                      {tx.category}
                     </Text>
                     <Text className="font-instrument text-gray-400 text-xs">
                       {formatDate(tx.date)}
