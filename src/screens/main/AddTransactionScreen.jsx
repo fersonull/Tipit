@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,17 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lucide from '@react-native-vector-icons/lucide';
+import { saveTransaction } from '../../services/firestore.service';
+import { AuthContext } from '../../contexts/AuthContext';
+import { toast } from '../../utils/toast.utils';
 
 export default function AddTransactionScreen({ navigation }) {
+  const { user } = useContext(AuthContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [type, setType] = useState('expense');
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
@@ -21,6 +27,33 @@ export default function AddTransactionScreen({ navigation }) {
 
   const isExpense = type === 'expense';
   const headerColor = isExpense ? 'bg-red-500' : 'bg-green-500';
+
+  const handleSave = async () => {
+    if (!amount || isNaN(amount)) {
+      toast.error('Invalid Input', 'Please enter a valid number.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await saveTransaction(user.uid, {
+        type: type,
+        amount: amount,
+        category: selectedCategory,
+        note: note,
+      });
+
+      // Clear the form and navigate back to the dashboard on success
+      setAmount('');
+      setNote('');
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <View className={`flex-1 ${headerColor}`}>
@@ -44,8 +77,9 @@ export default function AddTransactionScreen({ navigation }) {
           </Text>
           <View className="flex-row items-center">
             <Text className="font-instrument-bold text-white text-5xl mr-2">
-              $
+              ₱
             </Text>
+
             <TextInput
               className="font-instrument-bold text-white text-6xl min-w-[150px]"
               placeholder="0.00"
@@ -70,6 +104,7 @@ export default function AddTransactionScreen({ navigation }) {
               {['expense', 'income'].map(t => (
                 <TouchableOpacity
                   key={t}
+                  activeOpacity={0.7}
                   onPress={() => setType(t)}
                   className={`flex-1 py-3 rounded-xl items-center ${
                     type === t ? 'bg-white' : ''
@@ -142,10 +177,21 @@ export default function AddTransactionScreen({ navigation }) {
               />
             </View>
 
-            <TouchableOpacity className="w-full py-5 rounded-2xl items-center bg-[#4D7CFE] shadow-lg shadow-blue-200 mt-4">
-              <Text className="font-instrument-bold text-white text-lg">
-                Save Transaction
-              </Text>
+            <TouchableOpacity
+              onPress={handleSave}
+              disabled={isSubmitting}
+              activeOpacity={0.7}
+              className={`w-full py-5 rounded-2xl items-center shadow-lg mt-4 ${
+                isSubmitting ? 'bg-blue-300' : 'bg-[#4D7CFE] shadow-blue-200'
+              }`}
+            >
+              {isSubmitting ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text className="font-instrument-bold text-white text-lg">
+                  Save Transaction
+                </Text>
+              )}
             </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>

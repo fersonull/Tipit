@@ -1,10 +1,26 @@
 import Lucide from '@react-native-vector-icons/lucide';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { useTransactions } from '../../hooks/useTransactions';
+import { formatCurrency } from '../../utils/formatters.utils';
 
 export default function BalanceCard() {
-  const totalBalance = '6,890,000';
-  const totalIncome = '3,900,000';
-  const totalExpenses = '1,190,000';
+  const { transactions, isLoading } = useTransactions();
+
+  console.log(transactions);
+
+  const currentMonthTransactions = transactions;
+  const totalIncome = currentMonthTransactions
+    .filter(tx => tx.type === 'income')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+  const totalExpenses = currentMonthTransactions
+    .filter(tx => tx.type === 'expense')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+  const calculatedBalance = totalIncome - totalExpenses;
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#4D7CFE" className=" h-48" />;
+  }
+
   return (
     <View className="items-center relative mb-10 mt-2">
       {/* Stacked background effect */}
@@ -16,7 +32,7 @@ export default function BalanceCard() {
             Total Balance
           </Text>
           <Text className="font-instrument-bold text-white text-4xl tracking-tight">
-            ${totalBalance}
+            {formatCurrency(calculatedBalance)}
           </Text>
         </View>
 
@@ -31,7 +47,7 @@ export default function BalanceCard() {
                 Expenses
               </Text>
               <Text className="font-instrument-bold text-white text-base">
-                ${totalExpenses}
+                {formatCurrency(totalExpenses)}
               </Text>
             </View>
           </View>
@@ -46,7 +62,7 @@ export default function BalanceCard() {
                 Income
               </Text>
               <Text className="font-instrument-bold text-white text-base">
-                ${totalIncome}
+                {formatCurrency(totalIncome)}
               </Text>
             </View>
           </View>
