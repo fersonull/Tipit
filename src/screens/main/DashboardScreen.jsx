@@ -1,5 +1,7 @@
+import Lucide from '@react-native-vector-icons/lucide';
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import Header from '../../components/dashboard/Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // Optional: If you have vector icons installed, you can replace the text icons below
 // import { Feather } from '@expo/vector-icons';
@@ -16,7 +18,7 @@ export default function DashboardScreen() {
       title: 'Ticket plane',
       date: 'Today, 29 December 2021',
       amount: '-$50',
-      icon: '✈️', // Replace with actual vector icons later
+      icon: 'plane',
       iconBg: 'bg-indigo-50',
       iconColor: 'text-indigo-500',
     },
@@ -25,7 +27,7 @@ export default function DashboardScreen() {
       title: 'Book Apartment',
       date: 'Yesterday, 13 October 2021',
       amount: '-$150',
-      icon: '🏢',
+      icon: 'building',
       iconBg: 'bg-teal-50',
       iconColor: 'text-teal-500',
     },
@@ -34,7 +36,7 @@ export default function DashboardScreen() {
       title: 'Foodies Ngunyah',
       date: 'Recently, 09 May 2021',
       amount: '-$60',
-      icon: '🍔',
+      icon: 'hamburger',
       iconBg: 'bg-purple-50',
       iconColor: 'text-purple-500',
     },
@@ -43,7 +45,7 @@ export default function DashboardScreen() {
       title: 'Foodies Ngunyah',
       date: 'Recently, 12 May 2021',
       amount: '-$30',
-      icon: '🍔',
+      icon: 'hamburger',
       iconBg: 'bg-purple-50',
       iconColor: 'text-purple-500',
     },
@@ -56,25 +58,7 @@ export default function DashboardScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* --- HEADER --- */}
-        <View className="flex-row justify-between items-center mb-8">
-          <View>
-            <Text className="font-instrument-bold text-3xl text-gray-900 tracking-tight">
-              Welcome!
-            </Text>
-            <Text className="font-instrument text-gray-400 text-sm mt-1">
-              Track your budget here
-            </Text>
-          </View>
-          {/* Avatar Placeholder */}
-          <View className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm">
-            <Image
-              source={{
-                uri: 'https://api.dicebear.com/7.x/avataaars/png?seed=Felix',
-              }}
-              className="w-full h-full"
-            />
-          </View>
-        </View>
+        <Header />
 
         {/* --- BALANCE CARD --- */}
         <View className="items-center relative mb-10 mt-2">
@@ -148,7 +132,9 @@ export default function DashboardScreen() {
                 <View
                   className={`w-14 h-14 ${tx.iconBg} rounded-2xl items-center justify-center`}
                 >
-                  <Text className="text-2xl">{tx.icon}</Text>
+                  <Text className="text-2xl">
+                    <Lucide name={tx.icon} size={20} />
+                  </Text>
                 </View>
 
                 {/* Text Info */}

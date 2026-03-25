@@ -1,6 +1,32 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DashboardScreen from '../screens/main/DashboardScreen';
+import StatsScreen from '../screens/main/StatsScreen';
+import AddTransactionScreen from '../screens/main/AddTransactionScreen';
+import ProfileScreen from '../screens/main/ProfileScreen';
 import CustomTabBar from '../components/navigation/CustomTabBar';
+
+const tabs = [
+  {
+    name: 'DashboardScreen',
+    screen: DashboardScreen,
+    label: 'Dashbboard',
+  },
+  {
+    name: 'StatsScreen',
+    screen: StatsScreen,
+    label: 'Stats',
+  },
+  {
+    name: 'AddScreen',
+    screen: AddTransactionScreen,
+    label: 'Add',
+  },
+  {
+    name: 'ProfileScreen',
+    screen: ProfileScreen,
+    label: 'Profile',
+  },
+];
 
 const Tab = createBottomTabNavigator();
 
@@ -12,34 +38,16 @@ export default function MainBottomTabNavigator() {
         headerShown: false,
       }}
     >
-      <Tab.Screen
-        name="DashboardScreen"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Dashboard',
-        }}
-      />
-      <Tab.Screen
-        name="StatsScreen"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Stats',
-        }}
-      />
-      <Tab.Screen
-        name="AddScreen"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Stats',
-        }}
-      />
-      <Tab.Screen
-        name="ProfileScreen"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Stats',
-        }}
-      />
+      {tabs.map((tab, idx) => (
+        <Tab.Screen
+          key={idx}
+          name={tab.name}
+          component={tab.screen}
+          options={{
+            tabBarLabel: tab.label,
+          }}
+        />
+      ))}
     </Tab.Navigator>
   );
 }
