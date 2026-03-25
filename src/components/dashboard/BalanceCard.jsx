@@ -1,3 +1,4 @@
+import Lucide from '@react-native-vector-icons/lucide';
 import { View, Text } from 'react-native';
 
 export default function BalanceCard() {
@@ -23,7 +24,7 @@ export default function BalanceCard() {
           {/* Expenses */}
           <View className="flex-row items-center gap-3">
             <View className="w-10 h-10 bg-white rounded-full items-center justify-center shadow-sm">
-              <Text className="text-red-500 font-bold text-xl">↓</Text>
+              <Lucide name="move-down" size={16} color="#ef4444" />
             </View>
             <View>
               <Text className="font-instrument text-blue-100 text-xs">
@@ -38,7 +39,7 @@ export default function BalanceCard() {
           {/* Income */}
           <View className="flex-row items-center gap-3">
             <View className="w-10 h-10 bg-white rounded-full items-center justify-center shadow-sm">
-              <Text className="text-green-500 font-bold text-xl">↑</Text>
+              <Lucide name="move-up" size={16} color="#22c55e" />
             </View>
             <View>
               <Text className="font-instrument text-blue-100 text-xs">
