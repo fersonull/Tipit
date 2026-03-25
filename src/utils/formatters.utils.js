@@ -6,11 +6,13 @@ export const formatCurrency = amount => {
 };
 
 export const formatDate = date => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-  }).format(date);
+  }).format(dateObj);
 };
 
 export const getCategoryStyling = category => {
