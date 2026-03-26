@@ -6,6 +6,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import MainTabNavigator from './MainTabNavigator';
 import TransactionDetailScreen from '../screens/main/TransactionDetailScreen';
 import AllTransactionsScreen from '../screens/main/AllTransactionsScreen';
+import EditTransactionScreen from '../screens/main/EditTransactionScreen';
 import AuthStack from './AuthStack';
 
 const Stack = createNativeStackNavigator();
@@ -47,6 +48,13 @@ const RootNavigator = () => {
             <Stack.Screen
               name="AllTransactions"
               component={AllTransactionsScreen}
+              options={{
+                animation: 'ios_from_right',
+              }}
+            />
+            <Stack.Screen
+              name="EditTransaction"
+              component={EditTransactionScreen}
               options={{
                 animation: 'ios_from_right',
               }}

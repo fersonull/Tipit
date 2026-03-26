@@ -137,9 +137,9 @@ export default function TransactionDetailScreen({ route, navigation }) {
 
             {/* --- Notes Section --- */}
             {transaction.note ? (
-              <View className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 mt-4">
+              <View className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 mb-8">
                 <View className="flex-row items-center gap-3 mb-2">
-                  <Lucide name="filter-text" color="#9CA3AF" size={20} />
+                  <Lucide name="file-text" color="#9CA3AF" size={20} />
                   <Text className="font-instrument-bold text-gray-700 text-base">
                     Note
                   </Text>
@@ -153,7 +153,10 @@ export default function TransactionDetailScreen({ route, navigation }) {
             {/* --- Edit Button --- */}
             <TouchableOpacity
               activeOpacity={0.7}
-              className="w-full flex-row justify-center items-center py-5 gap-4 rounded-2xl bg-white border border-gray-200 mt-8 shadow-sm"
+              onPress={() =>
+                navigation.navigate('EditTransaction', { transaction })
+              }
+              className="w-full flex-row justify-center items-center py-5 gap-4 rounded-2xl bg-white border border-gray-200  shadow-sm"
             >
               <Lucide name="edit-3" color="#4B5563" size={20} />
               <Text className="font-instrument-bold text-gray-700 text-lg ml-2">

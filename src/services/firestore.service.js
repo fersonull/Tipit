@@ -42,3 +42,51 @@ export const saveTransaction = async (userId, transactionData) => {
     throw new Error('Transaction failed to save. Please try again.');
   }
 };
+
+// Add this below your existing saveTransaction function
+
+export const updateTransaction = async (
+  userId,
+  transactionId,
+  oldTx,
+  newTxData,
+) => {
+  const batch = firestore().batch();
+  const userRef = firestore().collection('users').doc(userId);
+  const txRef = userRef.collection('transactions').doc(transactionId);
+
+  try {
+    // 1. Calculate the old financial impact
+    const oldAmount = Number(oldTx.amount);
+    const oldImpact = oldTx.type === 'expense' ? -oldAmount : oldAmount;
+
+    // 2. Calculate the new financial impact
+    const newAmount = Number(newTxData.amount);
+    const newImpact = newTxData.type === 'expense' ? -newAmount : newAmount;
+
+    // 3. Find the exact difference to adjust the user's total balance
+    const balanceDifference = newImpact - oldImpact;
+
+    // 4. Update the transaction document
+    batch.update(txRef, {
+      ...newTxData,
+      amount: newAmount,
+      updatedAt: firestore.FieldValue.serverTimestamp(),
+    });
+
+    // 5. Update the user's total balance ONLY if the amount or type changed
+    if (balanceDifference !== 0) {
+      batch.update(userRef, {
+        totalBalance: firestore.FieldValue.increment(balanceDifference),
+        lastUpdated: firestore.FieldValue.serverTimestamp(),
+      });
+    }
+
+    // 6. Execute atomic write
+    await batch.commit();
+    return true;
+  } catch (error) {
+    console.error('Failed to update transaction:', error);
+    throw new Error('Could not update transaction. Please try again.');
+  }
+};
