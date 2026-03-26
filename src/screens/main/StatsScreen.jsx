@@ -1,42 +1,24 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useStats } from '../../hooks/useStats';
+import { formatCurrency, formatPercent } from '../../utils/formatters.utils';
 import Lucide from '@react-native-vector-icons/lucide';
 
 export default function StatsScreen() {
   const [period, setPeriod] = useState('Month'); // Week, Month, Year
 
-  // Mock data for UI
-  const spendingData = [
-    {
-      id: '1',
-      category: 'Food & Dining',
-      amount: 450,
-      color: 'bg-orange-400',
-      percentage: 45,
-    },
-    {
-      id: '2',
-      category: 'Transportation',
-      amount: 150,
-      color: 'bg-blue-400',
-      percentage: 15,
-    },
-    {
-      id: '3',
-      category: 'Shopping',
-      amount: 300,
-      color: 'bg-purple-400',
-      percentage: 30,
-    },
-    {
-      id: '4',
-      category: 'Entertainment',
-      amount: 100,
-      color: 'bg-teal-400',
-      percentage: 10,
-    },
-  ];
+  // Inject the Firestore hook, passing the current period state
+  const { totalIncome, totalExpense, spendingData, isLoading } =
+    useStats(period);
+
+  console.log(spendingData);
 
   return (
     <SafeAreaView className="flex-1 bg-[#F8FAFC]">
@@ -83,9 +65,20 @@ export default function StatsScreen() {
             <Text className="font-instrument text-gray-400 text-sm mb-1">
               Total Spend
             </Text>
-            <Text className="font-instrument-bold text-gray-900 text-xl">
-              $1,000.00
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator
+                size="small"
+                color="#EF4444"
+                className="items-start"
+              />
+            ) : (
+              <Text
+                className="font-instrument-bold text-gray-900 text-xl"
+                numberOfLines={1}
+              >
+                {formatCurrency(totalExpense)}
+              </Text>
+            )}
           </View>
 
           <View className="flex-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-50">
@@ -95,33 +88,71 @@ export default function StatsScreen() {
             <Text className="font-instrument text-gray-400 text-sm mb-1">
               Total Income
             </Text>
-            <Text className="font-instrument-bold text-gray-900 text-xl">
-              $3,250.00
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator
+                size="small"
+                color="#10B981"
+                className="items-start"
+              />
+            ) : (
+              <Text
+                className="font-instrument-bold text-gray-900 text-xl"
+                numberOfLines={1}
+              >
+                {formatCurrency(totalIncome)}
+              </Text>
+            )}
           </View>
         </View>
         <Text className="font-instrument-bold text-lg text-gray-900 mb-4">
           Spend Breakdown
         </Text>
-        <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-50 gap-6">
-          {spendingData.map(item => (
-            <View key={item.id}>
-              <View className="flex-row justify-between items-center mb-2">
-                <Text className="font-instrument-bold text-gray-700">
-                  {item.category}
-                </Text>
-                <Text className="font-instrument-bold text-gray-900">
-                  ${item.amount}
-                </Text>
-              </View>
-              <View className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <View
-                  className={`h-full rounded-full ${item.color}`}
-                  style={{ width: `${item.percentage}%` }}
-                />
-              </View>
+        <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-50 justify-center">
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#4D7CFE" />
+          ) : spendingData.length === 0 ? (
+            <View className="items-center justify-center opacity-50 py-4">
+              <Lucide
+                name="pie-chart"
+                color="#9CA3AF"
+                size={48}
+                strokeWidth={1.5}
+              />
+              <Text className="font-instrument text-gray-500 mt-4">
+                No spending data for this period.
+              </Text>
             </View>
-          ))}
+          ) : (
+            <View className="gap-6">
+              {spendingData.map(item => (
+                <View key={item.id}>
+                  <View className="flex-row items-center gap-4 overflow-y-auto">
+                    <View>
+                      <Text className="text-lg font-instrument-bold text-gray-400">
+                        {formatPercent(item.percentage)}
+                      </Text>
+                    </View>
+                    <View className="flex-1">
+                      <View className="flex-row justify-between items-center mb-2">
+                        <Text className="font-instrument-bold text-gray-700 capitalize">
+                          {item.category}
+                        </Text>
+                        <Text className="font-instrument-bold text-gray-900">
+                          {formatCurrency(item.amount)}
+                        </Text>
+                      </View>
+                      <View className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <View
+                          className={`h-full rounded-full ${item.color}`}
+                          style={{ width: `${item.percentage}%` }}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
         <View className="h-32" />
       </ScrollView>

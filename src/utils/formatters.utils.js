@@ -5,6 +5,14 @@ export const formatCurrency = amount => {
   }).format(amount);
 };
 
+export const formatPercent = value => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'percent',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1,
+  }).format(value / 100); // Divide by 100 if your value is 99.93
+};
+
 export const formatDate = date => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
 
