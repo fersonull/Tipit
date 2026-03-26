@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -11,26 +11,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Lucide from '@react-native-vector-icons/lucide';
 import { AuthContext } from '../../contexts/AuthContext';
 import BalanceCard from '../../components/dashboard/BalanceCard';
+import { toast } from '../../utils/toast.utils';
+import { getAuthError } from '../../utils/firebaseAuth.utils';
+import ConfirmationModal from '../../components/ui/ConfirmationModal';
 
 export default function ProfileScreen() {
+  const [isLogOutModalVisible, setLogOutModalVisible] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { logout, user } = useContext(AuthContext);
   console.log(user);
 
-  const handleLogout = () => {
-    Alert.alert('Log Out', 'Are you sure you want to log out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Log Out',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await logout();
-          } catch (error) {
-            console.error('Logout error', error);
-          }
-        },
-      },
-    ]);
+  const executeLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      setIsLoggingOut(false);
+    } catch (error) {
+      toast.error('Error logging you out', getAuthError(error));
+      setIsLoggingOut(false);
+    }
   };
 
   const menuItems = [
@@ -119,7 +118,7 @@ export default function ProfileScreen() {
 
           {/* Logout Button */}
           <TouchableOpacity
-            onPress={handleLogout}
+            onPress={() => setLogOutModalVisible(true)}
             className="flex-row items-center justify-between bg-red-50 p-4 rounded-2xl shadow-sm border border-red-100 mt-4"
           >
             <View className="flex-row items-center gap-4">
@@ -134,6 +133,18 @@ export default function ProfileScreen() {
         </View>
 
         <View className="h-32" />
+
+        <ConfirmationModal
+          visible={isLogOutModalVisible}
+          onClose={() => setLogOutModalVisible(false)}
+          onConfirm={executeLogout}
+          title="Log out account?"
+          message="Are you sure you want to log out?"
+          confirmText="Yes, Log out"
+          cancelText="Cancel"
+          type="danger"
+          isLoading={isLoggingOut}
+        />
       </ScrollView>
     </SafeAreaView>
   );

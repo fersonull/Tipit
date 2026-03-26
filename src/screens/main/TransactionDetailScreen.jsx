@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lucide from '@react-native-vector-icons/lucide';
@@ -7,9 +7,12 @@ import {
   formatDate,
   getCategoryStyling,
 } from '../../utils/formatters.utils';
+import ConfirmationModal from '../../components/ui/ConfirmationModal';
 
 export default function TransactionDetailScreen({ route, navigation }) {
-  // Pull the transaction from navigation params, or use a fallback for UI testing
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const transaction = route?.params?.transaction || {
     id: 'tx_123456789',
     type: 'expense',
@@ -19,29 +22,23 @@ export default function TransactionDetailScreen({ route, navigation }) {
     date: new Date(),
   };
 
+  const executeDelete = async () => {
+    setIsDeleting(true);
+    try {
+      // TODO: delete transaction
+      console.log('Deleting transaction:', transaction.id);
+
+      setDeleteModalVisible(false);
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+      setIsDeleting(false);
+    }
+  };
+
   const isExpense = transaction.type === 'expense';
   const headerColor = isExpense ? 'bg-red-500' : 'bg-green-500';
   const style = getCategoryStyling(transaction.category);
-
-  // Example placeholder for future Firestore deletion
-  const handleDelete = () => {
-    Alert.alert(
-      'Delete Transaction',
-      'Are you sure you want to delete this record? This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            // TODO: Call firestore().collection('users')...doc(transaction.id).delete()
-            // and update the totalBalance via a batched write.
-            navigation.goBack();
-          },
-        },
-      ],
-    );
-  };
 
   return (
     <View className={`flex-1 ${headerColor}`}>
@@ -58,7 +55,7 @@ export default function TransactionDetailScreen({ route, navigation }) {
             Details
           </Text>
           <TouchableOpacity
-            onPress={handleDelete}
+            onPress={() => setDeleteModalVisible(true)}
             className="p-2 -mr-2 bg-white/20 rounded-full"
           >
             <Lucide name="trash-2" color="white" size={20} />
@@ -165,6 +162,18 @@ export default function TransactionDetailScreen({ route, navigation }) {
             </TouchableOpacity>
           </ScrollView>
         </View>
+
+        <ConfirmationModal
+          visible={isDeleteModalVisible}
+          onClose={() => setDeleteModalVisible(false)}
+          onConfirm={executeDelete}
+          title="Delete Transaction?"
+          message="Are you sure you want to delete this record? This will permanently remove it from your balance and history."
+          confirmText="Yes, Delete"
+          cancelText="Cancel"
+          type="danger"
+          isLoading={isDeleting}
+        />
       </SafeAreaView>
     </View>
   );
