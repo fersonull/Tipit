@@ -8,12 +8,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from '../../contexts/AuthContext';
 import { updateTransaction } from '../../services/firestore.service';
 import Lucide from '@react-native-vector-icons/lucide';
+import { toast } from '../../utils/toast.utils';
 
 export default function EditTransactionScreen({ route, navigation }) {
   const { user } = useContext(AuthContext);
@@ -35,7 +35,7 @@ export default function EditTransactionScreen({ route, navigation }) {
 
   const handleUpdate = async () => {
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
-      Alert.alert(
+      toast.error(
         'Invalid Input',
         'Please enter a valid amount greater than 0.',
       );
@@ -55,7 +55,7 @@ export default function EditTransactionScreen({ route, navigation }) {
       // Navigate back to the Dashboard or List, passing the updated data implicitly via Firestore real-time listeners
       navigation.navigate('AppContent');
     } catch (error) {
-      Alert.alert('Error', error.message);
+      toast.error('Error', error.message);
     } finally {
       setIsSubmitting(false);
     }

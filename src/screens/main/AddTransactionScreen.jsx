@@ -49,7 +49,7 @@ export default function AddTransactionScreen({ navigation }) {
       setNote('');
       navigation.goBack();
     } catch (error) {
-      Alert.alert('Error', error.message);
+      toast.error('Error', error.message);
     } finally {
       setIsSubmitting(false);
     }
