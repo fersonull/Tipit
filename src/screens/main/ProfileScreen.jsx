@@ -13,6 +13,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 export default function ProfileScreen() {
   const { logout, user } = useContext(AuthContext);
+  console.log(user);
 
   const handleLogout = () => {
     Alert.alert('Log Out', 'Are you sure you want to log out?', [
@@ -56,9 +57,11 @@ export default function ProfileScreen() {
           <Text className="font-instrument-bold text-2xl text-gray-900">
             {user.displayName || 'User67'}
           </Text>
-          <Text className="font-instrument text-gray-500 mt-1">
-            {user?.email || 'user@example.com'}
-          </Text>
+          <View className="items-center">
+            <Text className="font-instrument text-gray-500 mt-1">
+              {user?.email || 'user@example.com'}
+            </Text>
+          </View>
 
           <TouchableOpacity className="mt-4 px-6 py-2 bg-blue-50 rounded-full">
             <Text className="font-instrument-bold text-blue-600">
@@ -69,10 +72,33 @@ export default function ProfileScreen() {
 
         {/* Menu Items */}
         <View className="px-6 py-6 gap-2">
+          {!user.emailVerified && (
+            <TouchableOpacity
+              onPress={handleLogout}
+              activeOpacity={0.7}
+              className="flex-row items-center justify-between bg-yellow-50 p-4 rounded-2xl shadow-sm border border-yellow-100 mt-4"
+            >
+              <View className="flex-row items-center gap-4">
+                <View className="w-10 h-10 bg-yellow-100 rounded-xl items-center justify-center">
+                  <Lucide name="mail-warning" color="#ca8a04" size={20} />
+                </View>
+                <View>
+                  <Text className="font-instrument-bold text-base">
+                    Your email is not verified
+                  </Text>
+                  <Text className="font-instrument text-sm">
+                    Verify your email 
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+
           {menuItems.map((item, index) => {
             return (
               <TouchableOpacity
                 key={index}
+                activeOpacity={0.7}
                 className="flex-row items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-gray-50"
               >
                 <View className="flex-row items-center gap-4">
