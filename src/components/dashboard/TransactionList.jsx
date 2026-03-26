@@ -18,7 +18,9 @@ export default function TransactionList() {
         <Text className="font-instrument-bold text-xl text-gray-900">
           Recent Transactions
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AllTransactions')}
+        >
           <Text className="font-instrument text-gray-400 text-sm">
             View all
           </Text>
