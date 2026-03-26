@@ -9,8 +9,8 @@ export const formatPercent = value => {
   return new Intl.NumberFormat('en-US', {
     style: 'percent',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 1,
-  }).format(value / 100); // Divide by 100 if your value is 99.93
+    maximumFractionDigits: 2,
+  }).format(value / 100);
 };
 
 export const formatDate = date => {
