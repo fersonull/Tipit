@@ -22,7 +22,7 @@ export default function BalanceCard() {
   }
 
   return (
-    <View className="items-center relative mb-10 mt-2">
+    <View className="items-center relative mt-10">
       {/* Stacked background effect */}
       <View className="absolute -top-4 w-[90%] h-48 bg-[#4D7CFE] rounded-3xl opacity-40 z-0" />
 

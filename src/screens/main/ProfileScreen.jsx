@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lucide from '@react-native-vector-icons/lucide';
 import { AuthContext } from '../../contexts/AuthContext';
+import BalanceCard from '../../components/dashboard/BalanceCard';
 
 export default function ProfileScreen() {
   const { logout, user } = useContext(AuthContext);
@@ -68,6 +69,8 @@ export default function ProfileScreen() {
               Edit Profile
             </Text>
           </TouchableOpacity>
+
+          <BalanceCard />
         </View>
 
         {/* Menu Items */}
@@ -87,7 +90,7 @@ export default function ProfileScreen() {
                     Your email is not verified
                   </Text>
                   <Text className="font-instrument text-sm">
-                    Verify your email 
+                    Verify your email
                   </Text>
                 </View>
               </View>

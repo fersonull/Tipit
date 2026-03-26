@@ -1,6 +1,5 @@
-import Lucide from '@react-native-vector-icons/lucide';
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Header from '../../components/dashboard/Header';
 import BalanceCard from '../../components/dashboard/BalanceCard';
 import TransactionList from '../../components/dashboard/TransactionList';
@@ -17,7 +16,9 @@ export default function DashboardScreen() {
         <Header />
 
         {/* --- BALANCE CARD --- */}
-        <BalanceCard />
+        <View className="mb-10">
+          <BalanceCard />
+        </View>
 
         {/* --- TRANSACTIONS LIST --- */}
         <TransactionList />
