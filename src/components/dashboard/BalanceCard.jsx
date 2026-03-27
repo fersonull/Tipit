@@ -26,7 +26,7 @@ export default function BalanceCard() {
       {/* Stacked background effect */}
       <View className="absolute -top-4 w-[90%] h-48 bg-[#4D7CFE] rounded-3xl opacity-40 z-0" />
 
-      <View className="w-full rounded-xl py-8 px-6 shadow-sm bg-[#4D7CFE]">
+      <View className="min-w-full rounded-xl py-8 px-6 shadow-sm bg-[#4D7CFE]">
         <View className="items-center mb-6">
           <Text className="font-instrument text-blue-100 text-sm mb-2">
             Total Balance
