@@ -90,3 +90,36 @@ export const updateTransaction = async (
     throw new Error('Could not update transaction. Please try again.');
   }
 };
+
+export const deleteTransaction = async (userId, transaction) => {
+  const batch = firestore().batch();
+  const userRef = firestore().collection('users').doc(userId);
+  const txRef = userRef.collection('transactions').doc(transaction.id);
+
+  try {
+    const amount = Number(transaction.amount);
+    const reversalAdjustment =
+      transaction.type === 'expense' ? amount : -amount;
+
+    // 2. Queue the deletion
+    batch.delete(txRef);
+
+    // 3. Queue the balance adjustment using SET with MERGE
+    // This bypasses the React Native bridge "update" bug completely
+    batch.set(
+      userRef,
+      {
+        totalBalance: firestore.FieldValue.increment(reversalAdjustment),
+        lastUpdated: firestore.FieldValue.serverTimestamp(),
+      },
+      { merge: true },
+    );
+
+    // 4. Commit the atomic operation
+    await batch.commit();
+    return true;
+  } catch (error) {
+    console.error('FIREBASE BATCH ERROR:', error.code, error.message);
+    throw new Error('Could not delete transaction. Balance remains unchanged.');
+  }
+};

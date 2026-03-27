@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Lucide from '@react-native-vector-icons/lucide';
@@ -8,8 +8,12 @@ import {
   getCategoryStyling,
 } from '../../utils/formatters.utils';
 import ConfirmationModal from '../../components/ui/ConfirmationModal';
+import { deleteTransaction } from '../../services/firestore.service';
+import { AuthContext } from '../../contexts/AuthContext';
+import { toast } from '../../utils/toast.utils';
 
 export default function TransactionDetailScreen({ route, navigation }) {
+  const { user } = useContext(AuthContext);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -23,15 +27,20 @@ export default function TransactionDetailScreen({ route, navigation }) {
   };
 
   const executeDelete = async () => {
+    if (!user?.uid || !transaction?.id) {
+      throw new Error('Invalid user or transaction ID.');
+    }
+
     setIsDeleting(true);
     try {
       // TODO: delete transaction
-      console.log('Deleting transaction:', transaction.id);
+      await deleteTransaction(user.uid, transaction);
 
       setDeleteModalVisible(false);
       navigation.goBack();
+      toast.success('Deleted', 'Transaction has been deleted successfully.');
     } catch (error) {
-      console.error(error);
+      toast.error('Error deleting', error.message);
       setIsDeleting(false);
     }
   };
